@@ -5,8 +5,8 @@ const RtlCssPlugin = require('rtlcss-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 const { isObject } = require('lodash');
+const { staticsDomain } = require('../src/constants');
 const StylableWebpackPlugin = require('stylable-webpack-plugin');
-const DynamicPublicPath = require('../src/webpack-plugins/dynamic-public-path');
 const {
   mergeByConcat,
   isSingleEntry,
@@ -21,6 +21,15 @@ const defaultSplitChunksConfig = {
   name: 'commons',
   minChunks: 2,
 };
+
+const artifactName = process.env.ARTIFACT_ID;
+const artifactVersion = process.env.ARTIFACT_VERSION;
+
+const constructArtifactBaseUrl = () =>
+  [staticsDomain, artifactName, artifactVersion].join('/') + '/';
+
+const ASSET_PATH =
+  artifactName && artifactVersion ? constructArtifactBaseUrl() : '/';
 
 const config = ({
   min,
@@ -91,8 +100,6 @@ const config = ({
 
       new DuplicatePackageCheckerPlugin({ verbose: true }),
 
-      new DynamicPublicPath(),
-
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': isProduction()
           ? '"production"'
@@ -131,6 +138,7 @@ const config = ({
       filename: min ? '[name].bundle.min.js' : '[name].bundle.js',
       chunkFilename: min ? '[name].chunk.min.js' : '[name].chunk.js',
       pathinfo: !min,
+      publicPath: ASSET_PATH,
     },
 
     target: 'web',

@@ -118,27 +118,36 @@ describe('Webpack basic configs', () => {
       expect(test.list('dist/statics/')).to.contain('tmp.chunk.js');
     });
 
-    it('should prepend dynamic public path (AKA __webpack_public_path__)', () => {
-      test
-        .setup({
-          'src/image.jpg': '(^_^)'.repeat(2500),
-          'src/client.js': `const img = require('./image.jpg');`,
-        })
-        .execute('build');
+    describe('public path', () => {
+      const ARTIFACT_ID = 'app-id';
+      const ARTIFACT_VERSION = '1.2.3';
 
-      const content = test.content('dist/statics/app.bundle.js');
-      const value = `typeof window !== 'undefined' && window.__STATICS_BASE_URL__ || __webpack_require__.p;`;
+      it('should construct the public path according to ARTIFACT_ID and ARTIFACT_VERSION environment variable', () => {
+        test
+          .setup({
+            'src/client.js': `console.log('test');`,
+          })
+          .execute('build', [], {
+            ARTIFACT_ID,
+            ARTIFACT_VERSION,
+          });
 
-      // Make sure it was the last override of __webpack_require__.p
-      expect(
-        content
-          .split('__webpack_require__.p = ')
-          .pop()
-          .indexOf(value),
-      ).to.equal(0);
-      expect(content).to.contain(
-        'module.exports = __webpack_require__.p + "image.jpg?',
-      );
+        expect(test.content('dist/statics/app.bundle.js')).to.contain(
+          `__webpack_require__.p = "https://static.parastorage.com/${ARTIFACT_ID}/${ARTIFACT_VERSION}/"`,
+        );
+      });
+
+      it('should use "/" for public case when one of the envrinoment variables is missing (local dev environment)', () => {
+        test
+          .setup({
+            'src/client.js': `console.log('test');`,
+          })
+          .execute('build');
+
+        expect(test.content('dist/statics/app.bundle.js')).to.contain(
+          `__webpack_require__.p = "/"`,
+        );
+      });
     });
   });
 
