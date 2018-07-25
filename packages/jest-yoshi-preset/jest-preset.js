@@ -12,10 +12,14 @@ module.exports = {
         testEnvironment: 'jsdom',
         testURL: 'http://localhost',
         testMatch: ['<rootDir>/src/**/*.spec.*'],
+        transformIgnorePatterns: ['/node_modules/(?!(.*?\\.st\\.css$))'],
+        transform: {
+          '\\.st.css?$': require.resolve('./transforms/stylable'),
+        },
         moduleNameMapper: {
-          '^.+\\.(css|scss)$': require.resolve('identity-obj-proxy'),
+          '^.+\\.(sass|scss)$': require.resolve('identity-obj-proxy'),
           '\\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|otf|eot|wav|mp3)$': require.resolve(
-            './transforms/file.js',
+            './transforms/file',
           ),
         },
       },
@@ -42,6 +46,8 @@ module.exports = {
           ...project,
 
           transform: {
+            ...project.transform,
+
             '^.+\\.(js)$': require.resolve('babel-jest'),
             '^.+\\.tsx?$': require.resolve('ts-jest'),
           },
