@@ -1,7 +1,7 @@
 module.exports = {
   extends: require.resolve('eslint-config-yoshi-base'),
 
-  plugins: ['jsx-a11y', 'react'],
+  plugins: ['jsx-a11y', 'react', 'eslint-plugin-wix-style-react'],
 
   env: {
     browser: true,
@@ -65,5 +65,6 @@ module.exports = {
     'jsx-a11y/role-has-required-aria-props': 'warn',
     'jsx-a11y/role-supports-aria-props': 'warn',
     'jsx-a11y/scope': 'warn',
+    'wix-style-react/no-full-wsr-lib': 'error'
   },
 };

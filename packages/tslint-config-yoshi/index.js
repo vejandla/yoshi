@@ -4,6 +4,7 @@ module.exports = addJsRules({
   rulesDirectory: ['tslint-react'],
 
   extends: ['tslint-react', 'tslint-config-yoshi-base'],
+  plugins: ['tslint-plugin-wix-style-react'],
 
   rules: {
     // https://github.com/palantir/tslint-react
@@ -13,5 +14,6 @@ module.exports = addJsRules({
     'jsx-no-lambda': false,
     'jsx-no-string-ref': true,
     'jsx-self-close': false,
+    'no-full-wsr-lib': true
   },
 });
