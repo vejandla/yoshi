@@ -3,8 +3,7 @@ const addJsRules = require('tslint-config-yoshi-base/addJsRules');
 module.exports = addJsRules({
   rulesDirectory: ['tslint-react'],
 
-  extends: ['tslint-react', 'tslint-config-yoshi-base'],
-  plugins: ['tslint-plugin-wix-style-react'],
+  extends: ['tslint-react', 'tslint-config-yoshi-base', 'tslint-plugin-wix-style-react'],
 
   rules: {
     // https://github.com/palantir/tslint-react
