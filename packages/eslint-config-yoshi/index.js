@@ -65,6 +65,8 @@ module.exports = {
     'jsx-a11y/role-has-required-aria-props': 'warn',
     'jsx-a11y/role-supports-aria-props': 'warn',
     'jsx-a11y/scope': 'warn',
-    'wix-style-react/no-full-wsr-lib': 'error'
+
+    // https://github.com/wix/wix-ui/tree/master/packages/eslint-plugin-wix-style-react
+    'wix-style-react/no-full-wsr-lib': 'error',
   },
 };
